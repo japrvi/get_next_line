@@ -6,48 +6,23 @@
 /*   By: jpozuelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/26 13:22:10 by jpozuelo          #+#    #+#             */
-/*   Updated: 2021/09/30 18:29:00 by jpozuelo         ###   ########.fr       */
+/*   Updated: 2021/10/06 17:21:56 by jpozuelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_list	*ft_lstnew(void *content)
+char	*depp_ccopy(char *buff, t_info info)
 {
-	t_list	*ptr;
-	
-	ptr = (t_list *) malloc(sizeof(t_list));
-	if (ptr)
+	char	*res;
+	size_t	i;
+
+	i = 0;
+	res = (char *) malloc((info.times * BUFFER_SIZE) + 1);
+	while (buff[i])
 	{
-		(ptr->content) = content;
-		(ptr->next) = NULL;
+		res[i] = buff[i];
+		i++;
 	}
-	return (ptr);
-}
-
-t_list ft_lstadd_back(t_list **lst, t_list *new)
-{
-	t_list *aux;
-
-	if (!(*lst))
-		*lst = new;
-	else
-	{
-		aux = ft_lstlast(*lst);
-		(aux->next) = new;
-	}
-}
-
-void	ft_lstfree(t_list **lst)
-{
-	t_list	*aux;
-	t_list	*tmp;
-
-	aux = *lst;
-	while (aux)
-	{
-		tmp = (aux->next);
-		free(aux);
-		aux = tmp;
-	}
+	free(buff);
 }
