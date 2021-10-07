@@ -6,7 +6,7 @@
 /*   By: jpozuelo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/26 13:23:30 by jpozuelo          #+#    #+#             */
-/*   Updated: 2021/10/06 17:01:50 by jpozuelo         ###   ########.fr       */
+/*   Updated: 2021/10/07 18:11:19 by jpozuelo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ typedef struct s_info
 	int	buff_read;
 	int	read;
 	int times;
+	int encontrado;
 	char *line;
+	char *last;
 	char buff[BUFFER_SIZE];
 } t_info;
 
-t_list  *ft_lstnew(void *content);
-void	ft_lstadd_back(t_list **lst, t_list *new);
-void	ft_lstfree(t_list **lst);
+char *deep_copy(t_info info);
 
 #endif
