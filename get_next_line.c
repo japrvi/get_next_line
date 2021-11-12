@@ -18,15 +18,21 @@ char	*get_next_line(int fd)
 	t_info        *info;
 
   info = &infor;
-  if (infor.line)
-	  free(infor.line);
   init_state (info, fd);
+  //printf("Estado incial: read = %d, bread =%u, times =%d\n", infor.read, infor.bread, infor.times);
+  //printf("Inicializo.\nInfo buff:%s\n Info line:%s\n", infor.buff, infor.line);
   while (!(infor.nword))
   {
-    if (!(infor.bread))
-		read_update(info, fd);
     if (infor.read > 0)
-	    transfer(info);
+	{
+		transfer(info);
+		//printf("Transfiero.\nInfo buff: %s\n Info line: %s\n Bread: %u\n", infor.buff, infor.line, infor.bread);
+	}
+    if (!(infor.bread))
+	{
+		read_update(info, fd);
+		//printf("Actualizo read=%d bread=%u.\n", infor.read, infor.bread);
+	}
   }
   return (infor.line);
 }

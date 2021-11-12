@@ -4,6 +4,16 @@
 
 int main()
 {
-  int fd = open("./get_next_line.c", O_RDONLY);
-  printf("%s", get_next_line(fd));
+	char *p;
+	//int i = 20;
+
+	int fd = open("./get_next_line_utils.c", O_RDONLY);
+	p = get_next_line(fd);
+	printf("%s", p);
+	while(p)
+	{
+		p = get_next_line(fd);
+		printf("%s", p);
+	}
+	close(fd);
 }

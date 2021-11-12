@@ -1,4 +1,4 @@
-/* ************************************************************************ */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
@@ -14,30 +14,64 @@
 
 void	deep_copy(t_info *info)
 {
+	char			*line;
+	char			*nline;
+	unsigned int	i;
+
+	line = info->line;
+	(info->times)++;
+	nline = (char *) malloc(((BUFFER_SIZE) * (info->times)) + 1);
+	i = 0;
+	while (line[i])
+	{
+		nline[i] = line[i];
+		i++;
+	}
+	nline[i] = line[i];
+	info->line = nline;
+	info->last = nline + i;
+	free(line);
 }
 
-char	str_tok_cpy(char *source, char *target, char *delimiter)
+char	str_tok_cpy(t_info *info, char delimiter)
 {
+  unsigned int	head;
+  unsigned int	i;
+  char			*buff;
+  char			*last;
+
+  i = 0;
+  head = info->head;
+  last = info->last;
+  buff = info->buff;
+  while (buff[head + i] && buff[head + i] != delimiter)
+  {
+    last[i] = buff[head + i];
+    i++;
+  }
+  last[i] = buff[head + i];
+  info->last = last + i;
+  info->head = head + i + 1;
+  if (buff[head + i] == delimiter)
+	  return (delimiter);
+  else
+	  return (0);
 }
 
 void	transfer(t_info *info)
 {
-	char	*last;
-	char	*buff;
 	char	cpy;
 
-	buff = info->buff;
-	last = info->last;
+	cpy = str_tok_cpy(info, '\n');
 	if (cpy == '\n')
 	{
-		last[i + 1] = 0;
 		info->nword = 1;
-	}
-	else
-	{
-		info->head += i;
+		(info->last)++;
+		*(info->last) = 0;
 		info->bread = 1;
 	}
+	else
+		info->bread = 0;
 }
 
 void	read_update(t_info *info, int fd)
@@ -47,18 +81,34 @@ void	read_update(t_info *info, int fd)
 
 	buff = info->buff;
 	r = read(fd, buff, BUFFER_SIZE);
-	buff[r] = 0;
-	deep_copy(info);
-	info->bread = 1;
+	if (r <= 0)
+	{
+		info->nword = 1;
+		if (info->line)
+			free(info->line);
+		info->line = NULL;
+	}
+	else 
+	{
+		buff[r] = 0;
+		deep_copy(info);
+		info->bread = 1;
+		info->head = 0;
+	}
 }
 
 void	init_state(t_info *info , int fd)
 {
 	int	r;
 
+	r = info->read;
 	if (info->line)
 		free(info->line);
-	r = read(fd, info->buff, BUFFER_SIZE);
+	if (!(info->bread))
+	{
+		r = read(fd, info->buff, BUFFER_SIZE);
+		(info->buff)[r] = 0;
+	}
 	if (r <= 0)
 	{
 		info->nword = 1;
@@ -69,8 +119,9 @@ void	init_state(t_info *info , int fd)
 	else
 	{
 		info->nword = 0;
-		info->line = (char *) malloc(BUFFER_SIZE);
+		info->line = (char *) malloc(BUFFER_SIZE + 1);
 		info->last = info->line;
 		info->times = 1;
 	}
+	info->read = r;
 }

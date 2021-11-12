@@ -13,27 +13,33 @@
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10000000
+# endif
 # include <unistd.h>
 # include <stdlib.h>
-
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-} t_list;
+# include <stdio.h>
 
 typedef struct s_info
 {
-	int	head;
-	int	buff_read;
-	int	read;
-	int times;
-	int encontrado;
+	unsigned int	head;
+	unsigned int  times;
+	int   read;
+	char  nword;
+	char  bread;
 	char *line;
 	char *last;
 	char buff[BUFFER_SIZE];
 } t_info;
 
-char *deep_copy(t_info info);
+char *get_next_line(int fd);
 
-#endif
+//functions get_next_line
+void  init_state(t_info *info, int fd);
+void  read_update(t_info *info, int fd);
+void  transfer(t_info *info);
+
+//functions aux
+char  str_tok_cpy(t_info *info, char delimiter);
+void  deep_copy(t_info *info);
+#endif 
