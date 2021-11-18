@@ -19,18 +19,21 @@ void	deep_copy(t_info *info)
 	unsigned int	i;
 
 	line = info->line;
-	(info->times)++;
-	nline = (char *) malloc(((BUFFER_SIZE) * (info->times)) + 1);
-	i = 0;
-	while (line[i])
+	if (line)
 	{
+		(info->times)++;
+		nline = (char *) malloc(((BUFFER_SIZE) * (info->times)) + 1);
+		i = 0;
+		while (line[i])
+		{
+			nline[i] = line[i];
+			i++;
+		}
 		nline[i] = line[i];
-		i++;
+		info->line = nline;
+		info->last = nline + i;
+		free(line);
 	}
-	nline[i] = line[i];
-	info->line = nline;
-	info->last = nline + i;
-	free(line);
 }
 
 char	str_tok_cpy(t_info *info, char delimiter)
@@ -68,7 +71,10 @@ void	transfer(t_info *info)
 		info->nword = 1;
 		(info->last)++;
 		*(info->last) = 0;
-		info->bread = 1;
+		if ((info->buff)[info->head] == 0)
+			info->bread = 0;
+		else
+			info->bread = 1;
 	}
 	else
 		info->bread = 0;
@@ -84,17 +90,14 @@ void	read_update(t_info *info, int fd)
 	if (r <= 0)
 	{
 		info->nword = 1;
-		if (info->line)
-			free(info->line);
-		info->line = NULL;
 	}
 	else 
 	{
 		buff[r] = 0;
 		deep_copy(info);
 		info->bread = 1;
-		info->head = 0;
 	}
+	info->head = 0;
 }
 
 void	init_state(t_info *info , int fd)
@@ -102,8 +105,6 @@ void	init_state(t_info *info , int fd)
 	int	r;
 
 	r = info->read;
-	if (info->line)
-		free(info->line);
 	if (!(info->bread))
 	{
 		r = read(fd, info->buff, BUFFER_SIZE);
@@ -112,9 +113,8 @@ void	init_state(t_info *info , int fd)
 	if (r <= 0)
 	{
 		info->nword = 1;
-		info->line = NULL;
-		info->last = NULL;
 		info->times = 0;
+		info->head = 0;
 	}
 	else
 	{

@@ -17,22 +17,25 @@ char	*get_next_line(int fd)
 	static t_info infor;
 	t_info        *info;
 
-  info = &infor;
-  init_state (info, fd);
-  //printf("Estado incial: read = %d, bread =%u, times =%d\n", infor.read, infor.bread, infor.times);
-  //printf("Inicializo.\nInfo buff:%s\n Info line:%s\n", infor.buff, infor.line);
-  while (!(infor.nword))
-  {
-    if (infor.read > 0)
+	info = &infor;
+	infor.line = NULL;
+	infor.last = NULL;
+	init_state (info, fd);
+	//printf("Estado incial: read = %d, bread =%u, times =%d\n", infor.read, infor.bread, infor.times);
+	//printf("Inicializo.\nInfo buff:%s\n Info line:%s\n", infor.buff, infor.line);
+	while (!(infor.nword))
 	{
-		transfer(info);
-		//printf("Transfiero.\nInfo buff: %s\n Info line: %s\n Bread: %u\n", infor.buff, infor.line, infor.bread);
+		if (infor.read > 0)
+		{
+			transfer(info);
+			//printf("Transfiero.\nInfo buff: %s\n Info line: %s\n Bread: %u\n", infor.buff, infor.line, infor.bread);
+		}
+		if (!(infor.bread))
+		{
+			read_update(info, fd);
+			//printf("Actualizo read=%d bread=%u.\n", infor.read, infor.bread);
+		}
 	}
-    if (!(infor.bread))
-	{
-		read_update(info, fd);
-		//printf("Actualizo read=%d bread=%u.\n", infor.read, infor.bread);
-	}
-  }
-  return (infor.line);
+	//printf("%s", infor.line);
+	return (infor.line);
 }
