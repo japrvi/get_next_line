@@ -129,3 +129,4 @@ void	init_state(t_info *info , int fd)
 		info->times = 1;
 	}
 	info->read = r;
+}
