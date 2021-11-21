@@ -24,12 +24,12 @@ typedef struct s_info
 {
 	unsigned int	head;
 	unsigned int	times;
-	long int   read;
-	char  nword;
-	char  bread;
-	char *line;
-	char *last;
-	char buff[BUFFER_SIZE];
+	int				read;
+	char			nword;
+	char			bread;
+	char			*line;
+	char			*last;
+	char			buff[BUFFER_SIZE];
 } t_info;
 
 char *get_next_line(int fd);
@@ -42,4 +42,5 @@ void  transfer(t_info *info);
 //functions aux
 char  str_tok_cpy(t_info *info, char delimiter);
 void  deep_copy(t_info *info);
+void	print_state(t_info *info);
 #endif 

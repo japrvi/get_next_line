@@ -9,16 +9,16 @@ int main()
 	//int i = 20;
 
 	c = 0;
-	int fd = open("./fich.txt", O_RDONLY);
+	int fd = open("./gnlTester/files/multiple_line_with_nl", O_RDONLY);
 	p = get_next_line(fd);
 	printf("%s", p);
-	/*while(p)
+	while(p)
 	{
 		p = get_next_line(fd);
 		printf("%s", p);
 	}
 	close(fd);
-	fd = open("./fich2.txt", O_RDONLY);
+	/*fd = open("./fich2.txt", O_RDONLY);
 	p = get_next_line(fd);
 	printf("%s", p);
 	while(p)
@@ -26,7 +26,8 @@ int main()
 		p = get_next_line(fd);
 		printf("%s", p);
 	}*/
-	read(fd, &c, 1);
-	printf("%c", c);
-	close(fd);
+	//read(fd, &c, 1);
+	//printf("%c", c);
+	//p = get_next_line(fd);
+	//printf("%s", p);
 }
